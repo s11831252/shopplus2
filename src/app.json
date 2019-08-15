@@ -7,16 +7,16 @@
     "selectedColor":"#c77b2d",
     "list": [
       {
+        "pagePath": "pages/home/index",
+        "text": "商品分类"
+      },   
+      {
         "pagePath": "pages/shop/index",
-        "text": "商品清单"
+        "text": "商品分类"
       },
       {
         "pagePath": "pages/shop/detail",
         "text": "联系我们"
-      },
-      {
-        "pagePath": "pages/order/index",
-        "text": "订单"
       },
       {
         "pagePath": "pages/my/index",

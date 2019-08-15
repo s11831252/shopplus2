@@ -1,9 +1,17 @@
 var routes = [
     {
+        path: 'pages/home/index',
+        name: 'home',
+        config: {
+            navigationBarTitleText: '店铺主页',
+            enablePullDownRefresh: true
+          },
+    },
+    {
         path: 'pages/shop/index',
         name: 'shop',
         config: {
-            navigationBarTitleText: '店铺主页',
+            navigationBarTitleText: '店铺分类',
             enablePullDownRefresh: true
           },
     },
@@ -14,14 +22,6 @@ var routes = [
             navigationBarTitleText: '授权登录页',
             enablePullDownRefresh: false
         },
-    },
-    {
-        path: 'pages/home/index',
-        name: 'home',
-        config: {
-            navigationBarTitleText: '主页',
-            enablePullDownRefresh: true
-          },
     },
     {
         path: 'pages/order/index',
