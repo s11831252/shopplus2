@@ -89,8 +89,9 @@ var routes = [
         path: 'pages/shop/index',
         name: 'shopindex',
         config: {
-            navigationBarTitleText: '店铺详情',
-            enablePullDownRefresh: true
+            navigationBarTitleText: '商品分类',
+            enablePullDownRefresh: true,
+            EnableNav:true,
         },
         alias: '/pages/shop/index',
         component: shop

@@ -1,7 +1,8 @@
 <template>
     <nav>
-        <router-link to="/pages/home/index">行业市场</router-link>
-        <router-link to="/pages/order/index">个人订单</router-link>
+        <router-link to="/pages/home/index">主页</router-link>
+        <router-link to="/pages/shop/index">商品分类</router-link>
+        <router-link to="/pages/order/index">订单</router-link>
         <router-link to="/pages/my/index">我的</router-link>
     </nav>
 </template>
@@ -24,9 +25,10 @@ export default {
     }
     nav a{
         line-height: 2rem;
-        width: 32%;
+        width: 22%;
         text-decoration:none;
         display: inline-block;
+        font-size: 0.4rem;
     }
 </style>
 

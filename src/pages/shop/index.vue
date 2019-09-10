@@ -1,34 +1,12 @@
 <template>
   <div class="shop-detail">
-    <div class="shop-detail-head">
-      <div class="shop-detail-logo">
-        <img :src="extConfig.sLogo">
-      </div>
-      <div class="shop-simple-info">
-        <p class="shop-detail-name">{{extConfig.sName}}</p>
-        <p class="shop-detail-notice">
-          店铺公告：
-          <span>{{shopDetail.Notice}}</span>
-        </p>
-        <div class="shop-detail-statistics">
-          <p class="shop-detail-statistics-sales">
-            本店销量：
-            <span>{{shopDetail.Sales}}</span>
-          </p>
-          <p class="shop-detail-statistics-goods">
-            商品数：
-            <span>{{shopDetail.GoodsCount}}</span>
-          </p>
-        </div>
-      </div>
-    </div>
     <div class="shop-detail-tab">
       <ul class="navbar">
         <li v-for="(item,index) in Tabs" :key="index" :id="index" :class="{'navbar_item_on':activeIndex == index}" class="navbar_item" @click="tabClick(item,$event)">
           <div class="navbar_title">{{item.name}}</div>
         </li>
       </ul>
-      <div class="navbar_slider" :class="navbarSliderClass"></div>
+      <!-- <div class="navbar_slider" :class="navbarSliderClass"></div> -->
       <div class="navbar-body">
         <div :hidden="activeIndex != 0">
           <div class="shop-detail-tab-goods">
@@ -45,8 +23,6 @@
         </div>
       </div>
     </div>
-    <shoppingCar :sId="shopDetail.sId"></shoppingCar>
-    <customService></customService>
   </div>
 </template>
 <script>
@@ -250,7 +226,7 @@ export default {
 
   .shop-detail-tab {
     background-color: #fff;
-    padding-top: 20px;
+    // padding-top: 20px;
     .shop-detail-tab-goods {
       height: 100%;
       min-height: 500px;
@@ -332,6 +308,7 @@ export default {
   border-bottom: 1rpx solid #ccc;
   position: relative;
   font-size: 0.41rem;
+  background-color: #12b7f5;
 }
 
 .navbar_item {
@@ -341,7 +318,7 @@ export default {
 }
 
 .navbar_item_on {
-  color: #12b7f5;
+  color: #fff;
 }
 
 .navbar_title {

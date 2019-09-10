@@ -11,7 +11,7 @@ var routes = [
         path: 'pages/shop/index',
         name: 'shop',
         config: {
-            navigationBarTitleText: '店铺分类',
+            navigationBarTitleText: '商品 分类',
             enablePullDownRefresh: true
           },
     },
