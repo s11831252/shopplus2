@@ -22,7 +22,7 @@
       <span>{{shopDetail.Notice}}</span>
     </li>
     <li>
-      <i class="icon">商品分类</i>
+      <i class="icon">店铺图片</i>
       <ul>
         <li v-for="(item,index) in shopDetail.ShopImages" :key="index">
           <!-- <img mode="widthFix" :src="item.ThumbnailUrl"> -->
@@ -37,19 +37,20 @@
   </ul>
 </template>
 <script>
+import { mapGetters, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
       gcj02: {
         latitude: 0,
         longitude: 0
-      }
+      },
     };
   },
   computed: {
     shopDetail() {
       return this.$store.state.Shop.ShopDetail;
-    }
+    },
   },
   methods: {
     openLocation() {
@@ -77,7 +78,8 @@ export default {
           phoneNumber: phoneNumber
         });
       }
-    }
+    },
+    ...mapActions(["GetShopDetail"]) //`this.$store.dispatch('GetShopDetail')`
   },
   onShareAppMessage(result) {
     let title = this.extConfig.sName||this.shopDetail.sName;
@@ -87,9 +89,15 @@ export default {
       path
     };
   },
-  mounted() {
+  async mounted() {
     let that = this;
+    if(this.$route.query.sId)
+    {
+      await this.GetShopDetail({ sId: this.$route.query.sId, refresh:true }); //获取店铺详情
+      wx.setNavigationBarTitle({ title: this.extConfig.sName });
+    }
     if (this.isMP) {
+      //设置定位
       that.$ShoppingAPI
         .baidu_geocoder({ location: `${that.shopDetail.Latitude},${that.shopDetail.Longitude}`,coordtype:'bd09ll',ret_coordtype:'gcj02ll' })
         .then(rep2 => {

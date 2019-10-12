@@ -144,6 +144,7 @@ export default new Vuex.Store({//store对象
             state.List.splice(index, 1);//清除该店铺购物清单
           }
         },
+        //选择物流
         SelectLogistics(state,payload){
           var shoppingcar = state.List.filter(item => item.sId == payload.sId)[0];//先查找该店铺的购物车
           if(shoppingcar)

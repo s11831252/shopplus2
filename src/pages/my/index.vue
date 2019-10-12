@@ -18,9 +18,9 @@
                         <div class="mystate_number2">{{Coupon}}<b>张</b></div>
                         <p class="mystate_p">优惠券</p>
                     </div>
-                    <div class="mystate_demo">
-                        <div class="mystate_number3">0<b>分</b></div>
-                        <p class="mystate_p">我的积分</p>
+                    <div class="mystate_demo" @click="go({path:'/pages/my/friend'})">
+                        <div class="mystate_number3">0<b>人</b></div>
+                        <p class="mystate_p">小伙伴人数</p>
                     </div>
                 </div>
                 <div class="myInfo">

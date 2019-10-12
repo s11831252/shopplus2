@@ -125,6 +125,7 @@ export default {
     }
   },
   mounted() {
+    debugger;
     if (
       this.$route.query &&
       this.$route.query.sId &&

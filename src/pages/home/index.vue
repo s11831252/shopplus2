@@ -41,25 +41,11 @@
     </div>
     <div class="hotproducts">
       <ul>
-        <li>
-          <img src="/static/img/chanpin1.png">
-          <p class="name">我是产品名称比较长比较长~</p>
+        <li v-for="(item,index) in hotGoods" :key="index" @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId}})">
+          <img :src="item.Images[0].Image_url" >
+          <p class="name">{{item.gName}}</p>
           <div class="price">
-            <p>￥3999.0</p>
-          </div>
-        </li>
-        <li>
-          <img src="/static/img/chanpin1.png">
-          <p class="name">我是产品名称比较长比较长~</p>
-          <div class="price">
-            <p>￥3999.0</p>
-          </div>
-        </li>
-        <li>
-          <img src="/static/img/chanpin1.png">
-          <p class="name">我是产品名称比较长比较长~</p>
-          <div class="price">
-            <p>￥3999.0</p>
+            <p>￥{{item.Price}}</p>
           </div>
         </li>
       </ul>
@@ -76,7 +62,7 @@
           <p class="brief">节能静音BD/BC-203KM</p>
           <div class="price">
             <p>
-              ￥6999.00
+              ￥{{6999.00}}
               <i class="icon">&#xe691;</i>
             </p>
           </div>
@@ -97,7 +83,19 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data(){
+    return {
+      hotGoods:[]
+    };
+  },
+  async mounted()
+  {
+    var result = await this.$WeixinOpenAPI.BusinesScircle_GetBS_ShoppingGoods({bId:this.extConfig.bId});
+    this.hotGoods=result.data;
+
+  }
+};
 </script>
 <style lang="less" scoped>
 page {

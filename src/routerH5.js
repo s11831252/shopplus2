@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import home from './pages/home/index'
 import order from './pages/order/index'
 import my from './pages/my/index'
+import myfriend from './pages/my/friend'
 import address from './pages/my/address'
 import addressadd from './pages/my/addressadd'
 import index from './pages/index/indexH5'
@@ -64,6 +65,16 @@ var routes = [
         },
         alias: '/pages/my/index',
         component: my
+    },
+    {
+        path: 'pages/my/friend',
+        name: 'myfriend',
+        config: {
+            navigationBarTitleText: '我的小伙伴',
+            enablePullDownRefresh: false
+          },
+          alias: '/pages/my/friend',
+          component: myfriend
     },
     {
         path: 'pages/my/address',

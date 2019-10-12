@@ -40,6 +40,14 @@ var routes = [
           },
     },
     {
+        path: 'pages/my/friend',
+        name: 'myfriend',
+        config: {
+            navigationBarTitleText: '我的小伙伴',
+            enablePullDownRefresh: false
+          },
+    },
+    {
         path: 'pages/my/address',
         name: 'address',
         config: {

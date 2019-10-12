@@ -5,6 +5,10 @@
             <div class="goods-info">
                 <p class="goods-item-price">￥{{selectedItem.Price}}
                     <!-- <span class="original">原价{{selectedItem.MarketingPrice}}</span> -->
+                    <span class="share">
+                      <div class="icon">&#xe60f;</div>
+                      <div>分享</div>
+                    </span>
                 </p>
                 <p class="goods-name">{{goods_detail.gName}}</p>
                 <div class="goods-item-info">
@@ -21,7 +25,7 @@
             <div class="goods-items">
                 <div class="goods-items-buy">
                     <span>数量：</span>
-                    <buy :goods="item" :image="goods_detail.Images[0].Thumbnail_url" :sName="sName" v-if="index==selectItem_index" v-for="(item,index) in goods_detail.Goods_Items" :key="index"></buy>
+                    <buy :goods="item" :image="goods_detail.Images[0].Thumbnail_url" :sName="goods_detail.sName" v-if="index==selectItem_index" v-for="(item,index) in goods_detail.Goods_Items" :key="index"></buy>
                 </div>
                 <div class="goods-items-show" v-if="HasItems">
                     <span>规格：</span>
@@ -29,6 +33,11 @@
                         <li :class="{'action':index==selectItem_index}" v-for="(item,index) in goods_detail.Goods_Items" :key="index" @click="selectItem(index)">{{item.ItemName}}</li>
                     </ul>
                 </div>
+            </div>
+            <div class="goods-items" >
+              <img :src="goods_detail.sLogo" class="shopping_logo"/>
+              <p class="shopping_name">{{goods_detail.sName}}</p>
+              <span class="shopping_go" @click="go({path:'/pages/shop/detail',query:{sId:goods_detail.sId}})"><span>进入店铺</span><i class="icon">&#xe601;</i></span>
             </div>
             <div class="goods-detail">
                 <p class="goods-detail-title">
@@ -66,7 +75,6 @@ export default {
   data() {
     return {
       sId: "",
-      sName: "",
       gId: "",
       goods_detail: {
         Price:"",
@@ -130,6 +138,10 @@ export default {
 
 <style lang="less" scoped>
 @import url("~mpvue-wxparse/src/wxParse.css");
+
+.page{
+  padding-bottom: 40px;
+}
 .goods {
   background: #ecf0f1;
   & > div {
@@ -140,12 +152,24 @@ export default {
     margin-bottom: 10px;
     .goods-item-price {
       font-size: 30px;
-      color: #ff5252;
+      color: #f4467c;
       .original {
         margin-left: 10px;
-        color: #a2a2a2;
+        color: #f4467c;
         font-size: 17px;
         text-decoration: line-through;
+      }
+      .share{
+        float: right;
+        font-size: 0.41rem;
+        color: #021218;
+        padding: 0 0 0.2rem 0.2rem;
+        border-left: 0.03rem solid #a2a2a2;
+        border-bottom: 0.03rem solid #a2a2a2;
+        div{
+          text-align: center;
+          display: block;
+        }
       }
     }
     .goods-name {
@@ -182,6 +206,25 @@ export default {
           padding: 1px 3px;
           display: inline-block;
         }
+      }
+    }
+
+    .shopping_logo{
+      width: 2.0rem;
+      height: 2.0rem;
+      margin-right: 0.3rem;
+    }
+    .shopping_logo,.shopping_name,.shopping_go{
+      display: inline-block;
+      font-size: 0.34rem;
+    }
+    .shopping_go{
+      border: 1px solid #d6d6d6;
+      float: right;
+      margin:0.6rem 0.36rem 0 0;
+      padding: 0.14rem;
+       span,i{
+        display: inline-block;
       }
     }
   }

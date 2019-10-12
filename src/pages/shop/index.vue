@@ -61,6 +61,8 @@ export default {
     FilterGoodsType() {
       var that = this;
       var list = that.GoodsType.filter(item => {
+        console.log(item)
+        console.log(that.shopDetail.Goods)
         if (item.TypeId > 0) {
           if (!that.shopDetail.Goods) return false;
           var goods = that.shopDetail.Goods.find(v => {
@@ -117,23 +119,26 @@ export default {
     },
     async init(refresh) {
       // console.log(`init:`,this.extConfig);
-      await this.GetShopDetail({ sId: this.extConfig.sId, refresh }); //获取店铺详情
-      if (this.extConfig.sId) {
+      // await this.GetShopDetail({ sId: this.extConfig.sId, refresh }); //获取店铺详情
+      if (this.extConfig.bId) {
         if (this.shopDetail.sName&&this.isMP) {
             wx.setNavigationBarTitle({ title: this.extConfig.sName });
           // this.Tabs[1].name += `(${this.shopDetail.CommentCount})`; //绑定评价数量
         }
-        var rep3 = await this.$ShoppingAPI.Goods_GetByShop({ sId: this.extConfig.sId }); //获取店铺商品
+        var rep3 = await this.$WeixinOpenAPI.BusinesScircle_GetBS_ShoppingGoods({ bId: this.extConfig.bId }); //获取店铺商品
         if (rep3.ret == 0) {
           this.shopDetail.Goods = rep3.data;
         }
-        var rep2 = await this.$ShoppingAPI.CustomGoodsType_Get({
-          sId: this.extConfig.sId
-        }); //获取店铺商品分类
+
+        //获取店铺商品分类
+        var rep2 = await this.$WeixinOpenAPI.BusinesScircle_GetBS_Shop_CustomGoodsType({
+          bId: this.extConfig.bId
+        }); 
         if (rep2.ret == 0) {
           this.GoodsType = rep2.data;
+          console.log(this.GoodsType)
           this.GoodsType.push({ Sort: "0", TypeId: "-1", TypeName: "其他" });
-          this.changeGoodsType(this.GoodsType[0].TypeId);
+          this.changeGoodsType(this.FilterGoodsType[0].TypeId);
         }
       }
     },
