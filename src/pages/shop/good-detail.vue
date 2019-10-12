@@ -8,6 +8,7 @@
                     <span class="share">
                       <div class="icon">&#xe60f;</div>
                       <div>分享</div>
+                      
                     </span>
                 </p>
                 <p class="goods-name">{{goods_detail.gName}}</p>
