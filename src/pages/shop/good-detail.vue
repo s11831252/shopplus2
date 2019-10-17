@@ -5,10 +5,10 @@
             <div class="goods-info">
                 <p class="goods-item-price">￥{{selectedItem.Price}}
                     <!-- <span class="original">原价{{selectedItem.MarketingPrice}}</span> -->
-                    <span class="share">
+                    <button class="share" open-type="share">
                       <div class="icon">&#xe60f;</div>
                       <div>分享</div>
-                    </span>
+                    </button>
                 </p>
                 <p class="goods-name">{{goods_detail.gName}}</p>
                 <div class="goods-item-info">
@@ -82,6 +82,14 @@ export default {
         Stock:"",
       },
       selectItem_index: 0
+    };
+  },
+  onShareAppMessage(result) {
+    let title = this.extConfig.sName||this.shopDetail.sName;
+    let path = `/pages/good-detail/index?gId=${this.gId}&sId=${this.sId}`;
+    return {
+      title,
+      path
     };
   },
   computed: {
@@ -166,10 +174,16 @@ export default {
         padding: 0 0 0.2rem 0.2rem;
         border-left: 0.03rem solid #a2a2a2;
         border-bottom: 0.03rem solid #a2a2a2;
+        line-height: normal;
+        background-color: transparent;
         div{
           text-align: center;
           display: block;
         }
+      }
+      .share::after
+      {
+        border: none;
       }
     }
     .goods-name {
