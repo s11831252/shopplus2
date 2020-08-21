@@ -55,7 +55,7 @@
             </div>
             <div class="goods-detail">
                 <p class="goods-detail-title">
-                    <span>商品参数</span>
+                    <span>商品详情</span>
                 </p>
                 <div class="goods-detail-content">
                   <wxParse :content="goods_detail.gDetailed" @preview="preview" @navigate="navigate" />

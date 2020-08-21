@@ -2,7 +2,7 @@ import http_axios from '../utils/http/axios'
 import http_wx from '../utils/http/wxhttp'
 const http = mpvue_Mode === 'WX' ? http_wx : http_axios;
 
-let BaseHost = process.env.NODE_ENV == 'production'?"https://market.ujianchina.net/":"http://192.168.0.85:811/";
+let BaseHost = process.env.NODE_ENV == 'production'?"https://www.lis360.com/":"https://www.lis360.com/";
 // let BaseHost = "http://192.168.0.86:811/";
 
 
@@ -49,6 +49,10 @@ export default {
     Goods_Get: param => {
         return http.get(BaseHost + "api/Goods/Get", param)
     },
+    Goods_Search: param => {
+        return http.get(BaseHost + "api/Goods/Search", param)
+    },
+
     GetLogisticsMode: param => {
         return http.get(BaseHost + "api/LogisticsDistribution/GetLogisticsMode", param)
     },

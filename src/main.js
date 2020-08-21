@@ -29,7 +29,8 @@ Vue.mixin({
             return true;
         },
         extConfig() {
-            return wx.getExtConfigSync ? wx.getExtConfigSync() : {};
+            // return wx.getExtConfigSync ? wx.getExtConfigSync() : {};
+            return { bId:"abe4d34f-cb60-4bd1-8c4f-864af1161640"}
         },
         async launchOptions(){
             var options = await  wx.getLaunchOptionsSync();
@@ -98,15 +99,6 @@ Vue.mixin({
             Object.assign(this, this.$options.data())
     },
     created: function () {
-        // if(this.extConfig&&this.extConfig.sId)
-        // {
-
-        // }else
-        // {
-        //     let extConfig = wx.getExtConfigSync? wx.getExtConfigSync(): {}
-        //     this.extConfig=extConfig;
-        // }
-        // console.log(this.extConfig)
     }
 });
 Vue.use(MpvueRoterPatch);//在Vue实例中使用$Router访问Vuex

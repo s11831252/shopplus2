@@ -122,7 +122,7 @@ export default {
       // await this.GetShopDetail({ sId: this.extConfig.sId, refresh }); //获取店铺详情
       if (this.extConfig.bId) {
         if (this.shopDetail.sName&&this.isMP) {
-            wx.setNavigationBarTitle({ title: this.extConfig.sName });
+            // wx.setNavigationBarTitle({ title: this.shopDetail.sName });
           // this.Tabs[1].name += `(${this.shopDetail.CommentCount})`; //绑定评价数量
         }
         var rep3 = await this.$WeixinOpenAPI.BusinesScircle_GetBS_ShoppingGoods({ bId: this.extConfig.bId }); //获取店铺商品
@@ -164,6 +164,7 @@ export default {
   async created() {
   },
   async mounted() {
+    debugger;
     let that = this;
     this.activeIndex = 0;
     this.Tabs = [

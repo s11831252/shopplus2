@@ -91,10 +91,10 @@ export default {
   },
   async mounted() {
     let that = this;
-    if(this.$route.query.sId)
+    if(this.$route.query.sId&&this.isMP)
     {
       await this.GetShopDetail({ sId: this.$route.query.sId, refresh:true }); //获取店铺详情
-      wx.setNavigationBarTitle({ title: this.extConfig.sName });
+      wx.setNavigationBarTitle({ title: this.shopDetail.sName });
     }
     if (this.isMP) {
       //设置定位

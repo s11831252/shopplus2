@@ -91,7 +91,7 @@ export default {
   },
   async mounted()
   {
-    var result = await this.$WeixinOpenAPI.BusinesScircle_GetBS_ShoppingGoods({bId:this.extConfig.bId});
+    var result = await this.$ShoppingAPI.Goods_Search({bId:this.extConfig.bId});
     this.hotGoods=result.data;
 
   }
