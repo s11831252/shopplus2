@@ -43,6 +43,9 @@ export default {
     CustomGoodsType_Get: param => {
         return http.get(BaseHost + "api/CustomGoodsType/Get", param)
     },
+    CustomGoodsType_GetByBusinesScircle: param => {
+        return http.get(BaseHost + "api/CustomGoodsType/GetByBusinesScircle", param)
+    },
     Goods_GetByShop: param => {
         return http.get(BaseHost + "api/Goods/GetByShop", param)
     },

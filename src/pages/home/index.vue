@@ -92,7 +92,8 @@ export default {
   async mounted()
   {
     var result = await this.$ShoppingAPI.Goods_Search({bId:this.extConfig.bId});
-    this.hotGoods=result.data;
+    this.hotGoods=result.data[0].Goods_list;
+    console.log(this.hotGoods)
 
   }
 };

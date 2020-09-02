@@ -11,11 +11,17 @@
         <div :hidden="activeIndex != 0">
           <div class="shop-detail-tab-goods">
             <ul class="shop-detail-tab-goods-types">
-              <li v-for="(item,index) in FilterGoodsType " :key="index" :class="{'active': item.TypeId==activeType}" @click="changeGoodsType(item.TypeId)">
+              <li v-for="(item,index) in FilterGoodsType " :key="index" :class="{'active': item.TypeId==activeType}" @click="changeGoodsType(item.TypeName)">
                 <p>{{item.TypeName}}</p>
               </li>
-            </ul><ul class="shop-detail-tab-goods-list">
-              <li v-for="(item,index) in goodList" :key="index" class="shop-detail-tab-goods-detail" @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId,sName:shopDetail.sName}})">
+            </ul>
+            <ul class="shop-detail-tab-goods-list">
+              <li
+                v-for="(item,index) in FilterGoodList"
+                :key="index"
+                class="shop-detail-tab-goods-detail"
+                @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId,sName:shopDetail.sName}})"
+              >
                 <indexGoodDetail :goodsInfo="item" :sName="shopDetail.sName"></indexGoodDetail>
               </li>
             </ul>
@@ -37,9 +43,10 @@ export default {
       // shopDetail: {},
       goodList: [],
       GoodsType: [],
+      goodsTypeMap:{},
       Tabs: [],
       activeIndex: 0,
-      activeType: 0,
+      activeType:null,
       gcj02: {
         latitude: 0,
         longitude: 0
@@ -58,26 +65,61 @@ export default {
     shopDetail() {
       return this.$store.state.Shop.ShopDetail;
     },
+    //过滤店铺商品类型,没有商品的分类不显示
     FilterGoodsType() {
       var that = this;
+      let typename = [];
       var list = that.GoodsType.filter(item => {
-        console.log(item)
-        console.log(that.shopDetail.Goods)
+        //去重,同名分类只显示一个
+        if(typename.indexOf(item.TypeName)>=0)
+        {
+          this.goodsTypeMap[item.TypeName].push(item.TypeId)
+          return false;
+        }
+        else
+        {
+          typename.push(item.TypeName)
+          this.goodsTypeMap[item.TypeName] = [];
+          this.goodsTypeMap[item.TypeName].push(item.TypeId)
+        }
+        //去重end
         if (item.TypeId > 0) {
-          if (!that.shopDetail.Goods) return false;
-          var goods = that.shopDetail.Goods.find(v => {
-            return v.TypeId.indexOf(item.TypeId) >= 0;
+          if (!that.goodList) return false;
+          var goods = that.goodList.find(v => {
+            return v.TypeId.indexOf(item.TypeId) > -1;
           });
           return goods != null;
         } else {
-          if (!that.shopDetail.Goods) return false;
-          var goods = that.shopDetail.Goods.find(v => {
+          if (!that.goodList) return false;
+          var goods = that.goodList.find(v => {
             return v.TypeId.length == 0;
           });
           return goods != null;
         }
       });
+      console.log(this.goodsTypeMap)
       return list;
+    },
+    FilterGoodList() {
+      var that = this
+      if (this.goodList && this.goodList.length > 0) {
+        var _list = this.goodList.filter(item => {
+          if (that.activeType) 
+          {
+            var typeArray =  that.goodsTypeMap[that.activeType];
+            for (let index = 0; index < typeArray.length; index++) {
+              const element = typeArray[index];
+              if(item.TypeId.indexOf(element)>-1)
+                return true;
+            }
+            return false;
+          }
+          else return item.TypeId.length == 0;
+        });
+        return _list;
+      } 
+      else 
+        return [];
     }
   },
   methods: {
@@ -112,40 +154,34 @@ export default {
     },
     changeGoodsType(typeid) {
       this.activeType = typeid;
-      this.goodList = this.shopDetail.Goods.filter(item => {
-        if (typeid > 1) return item.TypeId.indexOf(typeid) > -1;
-        else return item.TypeId.length == 0;
-      });
     },
     async init(refresh) {
-      // console.log(`init:`,this.extConfig);
-      // await this.GetShopDetail({ sId: this.extConfig.sId, refresh }); //获取店铺详情
       if (this.extConfig.bId) {
-        if (this.shopDetail.sName&&this.isMP) {
-            // wx.setNavigationBarTitle({ title: this.shopDetail.sName });
-          // this.Tabs[1].name += `(${this.shopDetail.CommentCount})`; //绑定评价数量
+        if (this.shopDetail.sName && this.isMP) {
         }
-        var rep3 = await this.$WeixinOpenAPI.BusinesScircle_GetBS_ShoppingGoods({ bId: this.extConfig.bId }); //获取店铺商品
+        var rep3 = await this.$ShoppingAPI.Goods_Search({ bId: this.extConfig.bId }); //获取商圈店铺商品
         if (rep3.ret == 0) {
-          this.shopDetail.Goods = rep3.data;
+          for (let index = 0; index < rep3.data.length; index++) {
+            const element = rep3.data[index];
+            this.goodList = this.goodList.concat(element.Goods_list);
+          }
         }
 
-        //获取店铺商品分类
-        var rep2 = await this.$WeixinOpenAPI.BusinesScircle_GetBS_Shop_CustomGoodsType({
+        //获取商圈店铺商品分类
+        var rep2 = await this.$ShoppingAPI.CustomGoodsType_GetByBusinesScircle({
           bId: this.extConfig.bId
-        }); 
+        });
         if (rep2.ret == 0) {
           this.GoodsType = rep2.data;
-          console.log(this.GoodsType)
           this.GoodsType.push({ Sort: "0", TypeId: "-1", TypeName: "其他" });
-          this.changeGoodsType(this.FilterGoodsType[0].TypeId);
+          this.changeGoodsType(this.FilterGoodsType[0].TypeName);
         }
       }
     },
     ...mapActions(["GetShopDetail"]) //`this.$store.dispatch('GetShopDetail')`
   },
   onShareAppMessage(result) {
-    let title = this.extConfig.sName||this.shopDetail.sName;
+    let title = this.extConfig.sName || this.shopDetail.sName;
     let path = `/pages/shop/index?sId=${this.extConfig.sId}`;
     return {
       title,
@@ -161,10 +197,8 @@ export default {
       withShareTicket: true
     });
   },
-  async created() {
-  },
+  async created() {},
   async mounted() {
-    debugger;
     let that = this;
     this.activeIndex = 0;
     this.Tabs = [
