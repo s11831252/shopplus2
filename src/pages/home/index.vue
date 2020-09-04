@@ -1,40 +1,40 @@
 <template>
   <div class="root">
     <div class="banner">
-      <img src="/static/img/2@3x.png">
+      <img src="/static/img/2@3x.png" />
     </div>
     <div class="classify">
       <ul>
         <li>
-          <img src="/static/img/t1@3x.png">
+          <img src="/static/img/t1@3x.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/t1拷贝@3x.png">
+          <img src="/static/img/t1拷贝@3x.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/t1拷贝2@3x.png">
+          <img src="/static/img/t1拷贝2@3x.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/t1拷贝3@3x.png">
+          <img src="/static/img/t1拷贝3@3x.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/youyanji.png">
+          <img src="/static/img/youyanji.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/fengshan.png">
+          <img src="/static/img/fengshan.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/kongt.png">
+          <img src="/static/img/kongt.png" />
           <p>空调</p>
         </li>
         <li>
-          <img src="/static/img/yi3x.png">
+          <img src="/static/img/yi3x.png" />
           <p>空调</p>
         </li>
       </ul>
@@ -42,7 +42,7 @@
     <div class="hotproducts">
       <ul>
         <li v-for="(item,index) in hotGoods" :key="index" @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId}})">
-          <img :src="item.Images[0].Image_url" >
+          <img :src="item.Images[0].Image_url" />
           <p class="name">{{item.gName}}</p>
           <div class="price">
             <p>￥{{item.Price}}</p>
@@ -57,7 +57,7 @@
       </p>
       <ul class="products_list">
         <li>
-          <img src="/static/img/goods.png">
+          <img src="/static/img/goods.png" />
           <p class="name">这是商品名称</p>
           <p class="brief">节能静音BD/BC-203KM</p>
           <div class="price">
@@ -68,7 +68,7 @@
           </div>
         </li>
         <li>
-          <img src="/static/img/goods.png">
+          <img src="/static/img/goods.png" />
           <p class="name">浴霸 灯暖换气照明三合一</p>
           <p class="brief">灯暖、换气、照明三合一</p>
           <div class="price">
@@ -84,17 +84,19 @@
 </template>
 <script>
 export default {
-  data(){
+  data() {
     return {
-      hotGoods:[]
+      hotGoods: []
     };
   },
-  async mounted()
-  {
-    var result = await this.$ShoppingAPI.Goods_Search({bId:this.extConfig.bId});
-    this.hotGoods=result.data[0].Goods_list;
-    console.log(this.hotGoods)
+  async mounted() {
+    var result = await this.$ShoppingAPI.Goods_Search({ bId: this.extConfig.bId });
 
+    for (let index = 0; index < result.data.length; index++) {
+      const element = result.data[index];
+      this.hotGoods = this.hotGoods.concat(element.Goods_list);
+    }
+    console.log(this.hotGoods);
   }
 };
 </script>
@@ -173,13 +175,13 @@ page {
     }
   }
   ul.products_list {
-    padding-left:  0.36rem;
+    padding-left: 0.36rem;
     li {
       display: inline-block;
       border: solid 0.01rem #d6d7dc;
       border-radius: 0.06rem;
       padding-bottom: 0.45rem;
-      margin: 0.43rem  0.43rem  0.43rem 0;
+      margin: 0.43rem 0.43rem 0.43rem 0;
       img {
         width: 4.73rem;
         height: 4.73rem;
@@ -199,9 +201,8 @@ page {
         font-size: 0.34rem;
         color: #7f8699;
         padding-left: 0.16rem;
-
       }
-      .price{
+      .price {
         margin-top: 0.53rem;
         font-family: MicrosoftYaHei;
         font-size: 0.45rem;
@@ -209,7 +210,7 @@ page {
         padding-left: 0.14rem;
         vertical-align: middle;
         line-height: 0.45rem;
-        i{
+        i {
           display: inline;
           float: right;
           font-size: 0.45rem;

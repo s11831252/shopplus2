@@ -76,6 +76,7 @@ export default {
     return {
       sId: "",
       gId: "",
+      sName:"",
       goods_detail: {
         Price:"",
         MarketingPrice:"",
@@ -85,7 +86,7 @@ export default {
     };
   },
   onShareAppMessage(result) {
-    let title = this.extConfig.sName||this.shopDetail.sName;
+    let title = `${this.sName||""}|${this.goods_detail.gName}`;
     let path = `/pages/good-detail/index?gId=${this.gId}&sId=${this.sId}`;
     return {
       title,

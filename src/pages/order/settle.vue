@@ -66,10 +66,12 @@ export default {
   methods: {
     ...mapMutations(["ShoppingCarEmpty"]),
     async pay() {
-      if (
-        this.getShoppingCarBysId.Logistics.FreightInfo &&
-        this.getShoppingCarGoods.length > 0
-      ) {
+      if(!this.getShoppingCarBysId.Logistics)
+        this.toast("请选择配送方式")
+
+      if(this.getShoppingCarGoods.length<=0)
+        this.toast("请选择下单商品")
+
         var rep = await this.$ShoppingAPI.Order_Create({
           LogisticsMode: this.Logistics.LogisticsId,
           DistributionModeId: this.Logistics.DistributionMode
@@ -89,7 +91,7 @@ export default {
             }
           });
         }
-      }
+      
     }
   },
   computed: {
@@ -125,7 +127,6 @@ export default {
     }
   },
   mounted() {
-    debugger;
     if (
       this.$route.query &&
       this.$route.query.sId &&
