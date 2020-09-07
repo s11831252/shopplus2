@@ -55,7 +55,6 @@ export default {
     Goods_Search: param => {
         return http.get(BaseHost + "api/Goods/Search", param)
     },
-
     GetLogisticsMode: param => {
         return http.get(BaseHost + "api/LogisticsDistribution/GetLogisticsMode", param)
     },
@@ -64,6 +63,29 @@ export default {
     },
     OrderAddress_Get: param => {
         return http.get(BaseHost + "api/OrderAddress/Get", param)
+    },
+    //新增订单地址
+    OrderAddress_Add: (param,LogisticsId) => {
+        if(LogisticsId!=undefined)
+            return http.post(BaseHost + `api/OrderAddress/Add?LogisticsId=${LogisticsId}`, param)
+        else
+            return http.post(BaseHost + "api/OrderAddress/Add", param)
+    },
+    //编辑订单地址
+    OrderAddress_Edit: param => {
+        return http.post(BaseHost + "api/OrderAddress/Edit", param)
+    },
+    //删除订单地址
+    OrderAddress_Delete: (Order_Address_Id) => {
+        if (!Order_Address_Id)
+            return;
+        return http.post(BaseHost + `api/OrderAddress/Delete?Order_Address_Id=${Order_Address_Id}`)
+    },
+    //设置默认订单地址
+    OrderAddress_SetDefault: (Order_Address_Id) => {
+        if (!Order_Address_Id)
+            return;
+        return http.post(BaseHost + `api/OrderAddress/SetDefault?Order_Address_Id=${Order_Address_Id}`)
     },
     QueryFreight: param => {
         return http.post(BaseHost + "api/LogisticsDistribution/QueryFreight", param)

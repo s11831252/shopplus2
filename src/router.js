@@ -79,7 +79,6 @@ var routes = [
             enablePullDownRefresh: false
         }
     },
-    
     {
         path:'pages/order/settle',
         name:'settle',
@@ -89,8 +88,8 @@ var routes = [
         }
     },
     {
-        path:'pages/order/logistics',
-        name:'logistics',
+        path:'pages/order/distribution',
+        name:'distribution',
         config: {
             navigationBarTitleText: '物流选择',
             enablePullDownRefresh: false

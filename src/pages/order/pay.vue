@@ -20,7 +20,7 @@
     </ul>
     <div class="pay-confirm">
       <button class="btn-ok" @click="pay">确定支付</button>
-      <button class="btn-no">稍后付款</button>
+      <button class="btn-no" @click="$router.back();">稍后付款</button>
     </div>
     <div class="modal pay-validCodeBox" v-if="modalOpen" @click="openModal">
       <div class="modal-container" @click.stop>
@@ -60,6 +60,8 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -72,7 +74,7 @@ export default {
       },
       code: "",
       PayMode: 0,
-      OrderId: null,
+      OrderId: "",
       modalOpen: false,
       countDownStr: "点击发送验证码",
       sendTime: 0
@@ -82,13 +84,18 @@ export default {
     code(newval, oldval) {
       if (newval.length == 4) {
         // console.log(oldval,newval);
-        var rep = this.$ShoppingAPI.Order_Pay({
-          OrderId: this.OrderId,
-          VerificationCode: newval
-        });
-        if (rep.ret == 0) {
-          this.replace({ path: "/pages/order/index" });
-        }
+        var that = this;
+        this.$ShoppingAPI
+          .Order_Pay({
+            OrderId: this.OrderId,
+            VerificationCode: newval
+          })
+          .then(rep => {
+            // console.log(rep)
+            if (rep.ret == 0) {
+              that.go({ path: "/pages/order/index", reLaunch: true });
+            }
+          });
       }
     }
   },
@@ -101,6 +108,7 @@ export default {
       this.code = "";
     },
     async pay() {
+      let that = this;
       if (this.PayMode == 0) {
         this.openModal();
         if (this.sendTime == 0) {
@@ -110,22 +118,64 @@ export default {
           }
         }
       } else if (this.PayMode == 1) {
-        wx.navigateToMiniProgram({
-          appId: "wx443ed32fe34ba2f0",
-          path: `pages/order/pay?OrderId=${this.OrderId}`,
-          extraData: {
-            SingleTicket: this.$store.state.User.SingleTicket
-          },
-          envVersion: "develop",
-          success(res) {
-            console.log("打开小程序成功", res);
-            // 打开成功
-          },
-          fail(res) {
-            // 打开失败
-            console.log("打开小程序失败", res);
-          }
+        var rep = await this.$ShoppingAPI.Order_Pay({
+          OrderId: this.OrderId,
+          Type: 1,
+          UserId: this.UserInfo.UserId,
+          appiId: "wx443ed32fe34ba2f0",
+          OpenId: this.UserInfo.openid
         });
+        if (rep.ret == 0) {
+          var payData = JSON.parse(rep.data);
+          var payData = {
+            ...payData,
+            async success(res) {
+              // console.log(res);
+              // that.$ShoppingAPI
+              //   .Order_UpdatePayState({
+              //     OrderId: that.OrderId,
+              //     Type: 1,
+              //     UserId: that.UserInfo.UserId,
+              //     appiId: "wx443ed32fe34ba2f0",
+              //     OpenId: that.UserInfo.openid
+              //   })
+              //   .then(rep => {
+              //   });
+              
+              //场景值scene=1037 则返回调用过来的商家小程序
+              let options = await that.launchOptions;
+              if(options&&options.scene==1037)
+              {
+                  wx.navigateBackMiniProgram({
+                    extraData: {
+                    OrderId:this.OrderId,
+                    success: "true",
+                    msg:"支付成功"
+                  },
+                  success(res2) {
+                    // 返回成功
+                    console.log(res2)
+                  }
+                  })
+              }else
+              {
+                //弹出提示框
+                that.modal("支付成功","您已支付成功,请稍后检查订单状态。",
+                ()=>{
+                  that.go({ path: "/pages/order/index", reLaunch: true });
+                },
+                ()=>{
+                  that.go({ path: "/pages/order/index", reLaunch: true });
+                });
+              }
+            },
+            fail: function(res) {
+              that.toast( res.errMsg || res.err_desc||"支付失败")
+            }
+          };
+          // console.log(payData);
+          wx.requestPayment(payData);
+        }
       }
     },
     countDown() {
@@ -148,21 +198,22 @@ export default {
   computed: {
     money() {
       return (this.OrderInfo.TotalAmount - this.OrderInfo.PayAmount).toFixed(2);
-    }
+    },
+    ...mapState({
+      UserInfo: state => state.User.UserInfo
+    })
   },
-  async onShow() {
-    let that = this;
-    //1.从商家小程序跳转到U建行业市场小程序进行微信支付,此处通过小程序api获取启动时商家小程序传递过来的用户票据SingleTicket
-    var options = await that.launchOptions
-    if (options.scene == 1038) {
-      if(options.referrerInfo&&options.referrerInfo.extraData)
-      {
-        this.OrderId =options.referrerInfo.extraData.OrderId;
-      }
-    }
+  async onShow(){
+    //1.从商家小程序跳转到U建行业市场小程序进行微信支付,此处通过小程序api获取启动时商家小程序传递过来的用户票据SingleTicket, 
+    //2.订单则传递到query.OrderId
+    let options = await this.launchOptions;
+    
+    // console.log(options)
+    if(options&&options.referrerInfo&&options.referrerInfo.extraData&&options.referrerInfo.extraData.SingleTicket)
+      this.$store.commit("Login", { Ticket: options.referrerInfo.extraData.SingleTicket }); //存入Ticket
   },
   async mounted() {
-    if (this.OrderId||(this.$route.query && this.$route.query.OrderId)) {
+    if (this.$route.query && this.$route.query.OrderId) {
       this.OrderId = this.$route.query.OrderId;
       var rep = await this.$ShoppingAPI.Order_Get({ OrderId: this.OrderId });
       if (rep.ret == 0) {

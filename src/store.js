@@ -10,6 +10,7 @@ export default new Vuex.Store({//store对象
     User: {
       state: {
         UserInfo: {},
+        CurrentLocation:{},
         SingleTicket: "",
       },
       getters:{
@@ -24,6 +25,9 @@ export default new Vuex.Store({//store对象
         },
         GetUserInfo(state, UserInfo) {
           state.UserInfo = UserInfo;
+        },
+        UpdateLocation(state,payload){
+          state.CurrentLocation = payload;
         },
       }
     },

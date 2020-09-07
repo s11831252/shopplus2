@@ -10,6 +10,7 @@ import index from './pages/index/indexH5'
 import shop from './pages/shop/index'
 import shopgoods from './pages/shop/detail'
 import settle from './pages/order/settle'
+import distribution from './pages/order/distribution'
 import logistics from './pages/order/logistics'
 import pay from './pages/order/pay'
 
@@ -128,14 +129,14 @@ var routes = [
         component: settle
     },
     {
-        path:'pages/order/logistics',
-        name:'logistics',
+        path:'pages/order/distribution',
+        name:'distribution',
         config: {
             navigationBarTitleText: '物流选择',
             enablePullDownRefresh: false
         },
-        alias: '/pages/order/logistics',
-        component: logistics
+        alias: '/pages/order/distribution',
+        component: distribution
     },
     {
         path:'pages/order/pay',
