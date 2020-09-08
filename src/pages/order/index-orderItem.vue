@@ -7,8 +7,8 @@
                 <span class="right">{{stateName}}</span>
             </p>
         </div>
-        <ul class="shoppingcarList">
-            <li v-for="(item, index) in order.Order_Goods_items" :key="index">
+        <ul class="shoppingcarList" @click="go({path:'/pages/order/orderDetail',query:{OrderId:order.OrderId}  })">
+            <li v-for="(item, index) in order.Order_Goods_items" :key="index" >
                 <span class="goods-img"><img :src="item.Image_url"></span>
                 <span class="goods-info">
                     <p class="goods-name">{{item.gName}}</p>
@@ -31,7 +31,7 @@
             <div class="orderinfo-item btn-group">
                 <button v-if="stateName=='待付款'" @click="cancle" class="btn right">取消订单</button>
                 <button v-if="stateName=='待付款'" @click="go({path:'/pages/order/pay',query:{OrderId:order.OrderId}})" class="btn right pay">付款</button>
-                <button v-if="stateName=='待发货'" @click="ApplyCancel" class="btn right">申请退款</button>
+                <button v-if="stateName=='待发货'" @click="go({path:'/pages/order/orderreturn',query:{OrderId:order.OrderId,retreat:1}})" class="btn right">申请退款</button>
             </div>
         </div>
     </div>
@@ -86,16 +86,6 @@ export default {
         this.order.State = 0;
       }
     },
-    async ApplyCancel() {
-      var rep = this.$ShoppingAPI.Order_ApplyCancel({
-        OrderId: this.order.OrderId,
-        CancelType: 0,
-        IsCancelling: true
-      });
-      if (rep.ret == 0) {
-        this.order.IsCancelling = true;
-      }
-    }
   },
   mounted() {}
 };

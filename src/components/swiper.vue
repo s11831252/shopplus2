@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="root">
         <!-- <ul class="swiper-list">
             <li class="swiper-item">
                 <img :src="currentImg" @click="previewImage(swiperData[currentIndex],swiperData)">
@@ -71,24 +71,24 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-swiper{
-  height: 7.82rem;
+.root{
+  height: 100%;
 }
 .swiper {
   position: relative;
   width: 100%;
   text-align: center;
   vertical-align: middle;
+  height: 100%;
   .swiper-list {
     width: 100%;
     .swiper-item {
       width: 100%;
-      
     }
   }
   img.slide-image {
         width: 100%;
-        height: 7.82rem;
+        height: auto;
   }
   .direction {
     .left,

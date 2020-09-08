@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from './pages/home/index'
 import order from './pages/order/index'
+import orderDetail from './pages/order/orderDetail'
+import orderreturn from './pages/order/orderreturn'
 import my from './pages/my/index'
 import myfriend from './pages/my/friend'
 import address from './pages/my/address'
@@ -54,6 +56,27 @@ var routes = [
         },
         alias: '/pages/order/index',
         component: order
+    },
+    {
+        path: 'pages/order/orderDetail',
+        name: 'orderDetail',
+        config: {
+            navigationBarTitleText: '订单详情',
+            enablePullDownRefresh: true,
+            onReachBottomDistance: true,
+            onReachBottomDistance: 50
+          },
+        alias: '/pages/order/orderDetail',
+        component: orderDetail
+    },
+    {
+        path: 'pages/order/orderreturn',
+        name: 'orderreturn',
+        config: {
+            navigationBarTitleText: '售后服务',
+          },
+        alias: '/pages/order/orderreturn',
+        component: orderreturn
     },
     {
         path: 'pages/my/index',

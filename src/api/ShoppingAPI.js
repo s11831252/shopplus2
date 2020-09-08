@@ -34,6 +34,10 @@ export default {
     Market_Get: param => {
         return http.get(BaseHost + "api/Market/Get", param)
     },
+    CommonInfo_GetKeywordType: param => {
+        return http.get(BaseHost + 'api/CommonInfo/GetKeywordType', param)
+    },
+    
     Shop_Get: param => {
         return http.get(BaseHost + "api/Shop/Get", param)
     },

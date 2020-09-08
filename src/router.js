@@ -32,6 +32,20 @@ var routes = [
           },
     },
     {
+        path: 'pages/order/orderDetail',
+        name: 'orderDetail',
+        config: {
+            navigationBarTitleText: '订单详情',
+          },
+    },
+    {
+        path: 'pages/order/orderreturn',
+        name: 'orderreturn',
+        config: {
+            navigationBarTitleText: '售后服务',
+          },
+    },
+    {
         path: 'pages/my/index',
         name: 'my',
         config: {

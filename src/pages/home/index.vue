@@ -1,9 +1,9 @@
 <template>
   <div class="root">
     <div class="banner">
-      <img src="/static/img/2@3x.png" />
+      <swipeWeb :swiperData="banner"></swipeWeb>
     </div>
-    <div class="classify">
+    <!-- <div class="classify">
       <ul>
         <li>
           <img src="/static/img/t1@3x.png" />
@@ -38,10 +38,10 @@
           <p>空调</p>
         </li>
       </ul>
-    </div>
+    </div> -->
     <div class="hotproducts">
       <ul>
-        <li v-for="(item,index) in hotGoods" :key="index" @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId}})">
+        <li v-for="(item,index) in newgoods" :key="index" @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId}})">
           <img :src="item.Images[0].Image_url" />
           <p class="name">{{item.gName}}</p>
           <div class="price">
@@ -56,24 +56,13 @@
         <i class="icon">&#xe68b;</i>
       </p>
       <ul class="products_list">
-        <li>
-          <img src="/static/img/goods.png" />
-          <p class="name">这是商品名称</p>
-          <p class="brief">节能静音BD/BC-203KM</p>
+        <li v-for="(item,index) in hotGoods" :key="index">
+          <img :src="item.Images[0].Image_url" />
+          <p class="name">{{item.gName}}</p>
+          <!-- <p class="brief">节能静音BD/BC-203KM</p> -->
           <div class="price">
             <p>
-              ￥{{6999.00}}
-              <i class="icon">&#xe691;</i>
-            </p>
-          </div>
-        </li>
-        <li>
-          <img src="/static/img/goods.png" />
-          <p class="name">浴霸 灯暖换气照明三合一</p>
-          <p class="brief">灯暖、换气、照明三合一</p>
-          <div class="price">
-            <p>
-              ￥6999.00
+              ￥{{item.Price}}
               <i class="icon">&#xe691;</i>
             </p>
           </div>
@@ -83,35 +72,59 @@
   </div>
 </template>
 <script>
+import swipeWeb from "@/components/swiper";
+
 export default {
+  components: {
+    swipeWeb,
+  },
   data() {
     return {
-      hotGoods: []
+      Goods: [],
+      banner:["/static/img/2@3x.png"]
     };
+  },
+  computed:{
+    newgoods(){
+      if( this.Goods&& this.Goods.length>0)
+      {
+        var _arr = this.Goods.slice();
+        _arr.sort(function(a,b){
+          return Date.parse(b.CreateTime)-Date.parse(a.CreateTime)
+        })
+        console.log(_arr)
+        return _arr.slice(0,4)
+      }
+    },
+    hotGoods(){
+      if( this.Goods&& this.Goods.length>0)
+      {
+        var _arr = this.Goods.slice();
+        _arr.sort(function(a,b){
+          return Date.parse(b.Sales)-Date.parse(a.Sales)
+        })
+        return _arr.slice(0,2)
+      }
+    }
   },
   async mounted() {
     var result = await this.$ShoppingAPI.Goods_Search({ bId: this.extConfig.bId });
 
     for (let index = 0; index < result.data.length; index++) {
       const element = result.data[index];
-      this.hotGoods = this.hotGoods.concat(element.Goods_list);
+      this.Goods = this.Goods.concat(element.Goods_list);
     }
-    console.log(this.hotGoods);
+    console.log(this.Goods);
   }
 };
 </script>
 <style lang="less" scoped>
-page {
-}
 .root {
   background-color: #f2f3f5;
 }
 .banner {
   background-color: #fff;
-  img {
-    width: 10.8rem;
-    height: 4.68rem;
-  }
+  height: 4.68rem;
 }
 .classify {
   background-color: #fff;
