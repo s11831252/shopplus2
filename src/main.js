@@ -54,7 +54,58 @@ Vue.mixin({
                 title: title,
                 icon: "none"
             });
-        }
+        },
+        //全局wx登录函数,vue生命周期执行时,对于需要登录票据才可进行访问请求的异步操作可以放置到获取登录之后执行
+        wx_login(callback) {
+            var parms ={};
+            if(this.launchOptions.query&&this.launchOptions.query.InvitaId)
+            {
+                parms.InvitaId=this.launchOptions.query.InvitaId;
+            }
+            if(!this.$store.getters.Logined)//没有登录尝试登录 
+            {
+                // 调用wx登录接口
+                wx.login({
+                    success: obj => {
+                        if (obj.errMsg.indexOf("login:ok") > -1) {
+                            this.$ShoppingAPI.Account_wxLogin({code:obj.code,appid:that.extConfig.appid}).then(rep => {
+                                if (rep.ret == 0) {
+                                    this.userInfo.unionid = rep.data.result.unionid;
+                                    this.userInfo.openid = rep.data.result.openid;
+                    
+                                    if (rep.data.ticket) {
+                                        this.$store.commit("Login", { Ticket: rep.data.ticket }); //存入Ticket
+                                        if(rep.data.result.errcode==0)//0表示系统用户 -1游客
+                                        {
+                                            this.$ShoppingAPI.User_Get().then(userinfo => {
+                                                if (userinfo.ret == 0) {
+                                                    userinfo.data.unionid= rep.data.result.unionid;
+                                                    userinfo.data.openid = rep.data.result.openid;
+                                                    this.$store.commit("SetUserInfo", userinfo.data);
+                                                }
+                                            });
+                                        }
+                                    }
+                                    if(callback)
+                                        callback();
+                                }else
+                                {
+                                    if(callback)
+                                        allback();
+                                }
+                            });
+                        } else {
+                            if(callback)
+                            callback()
+                        }
+                    }
+                });
+            }else
+            {
+                if(callback)
+                    callback();
+            }
+        },
     },
     onLaunch() {
         // 获取小程序更新机制兼容

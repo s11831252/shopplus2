@@ -92,7 +92,7 @@ export default {
     async init(){
         if (!this.UserInfo) {
             var rep = await this.$ShoppingAPI.User_Get();
-            if (rep.ret == 0) this.$store.commit("GetUserInfo", rep.data);
+            if (rep.ret == 0) this.$store.commit("SetUserInfo", rep.data);
         }
 
         this.$UJAPI.Balance_Purse().then(rep => {

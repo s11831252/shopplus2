@@ -80,7 +80,7 @@ export default {
                       userinfo.data.unionid= rep.data.result.unionid;
                       userinfo.data.openid = rep.data.result.openid;
                       // console.log(userinfo.data);
-                      this.$store.commit("GetUserInfo", userinfo.data);
+                      this.$store.commit("SetUserInfo", userinfo.data);
                       if (this.$route.query.redirect)
                         // 切换至 tabBar页面
                         this.$router.push({
