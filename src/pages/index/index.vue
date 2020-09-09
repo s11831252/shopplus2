@@ -60,49 +60,6 @@ export default {
         });
       }
     },
-    wx_login() {
-      var that = this;
-      // 调用wx登录接口
-      wx.login({
-        success: obj => {
-          if (obj.errMsg.indexOf("login:ok") > -1) {
-          
-            this.$ShoppingAPI.Account_wxLogin({code:obj.code,appid:that.extConfig.appid}).then(rep => {
-              if (rep.ret == 0) {
-                // console.log(rep);
-                this.userInfo.unionid = rep.data.result.unionid;
-                this.userInfo.openid = rep.data.result.openid;
-                // console.log(this.userInfo);
-                if (rep.data.ticket) {
-                  this.$store.commit("Login", { Ticket: rep.data.ticket }); //存入Ticket
-                  this.$ShoppingAPI.User_Get().then(userinfo => {
-                    if (userinfo.ret == 0) {
-                      userinfo.data.unionid= rep.data.result.unionid;
-                      userinfo.data.openid = rep.data.result.openid;
-                      // console.log(userinfo.data);
-                      this.$store.commit("SetUserInfo", userinfo.data);
-                      if (this.$route.query.redirect)
-                        // 切换至 tabBar页面
-                        this.$router.push({
-                          path: this.$route.query.redirect,
-                          isTab: true
-                        });
-                      // 切换至 tabBar页面
-                      else
-                        this.$router.push({
-                          path: "/pages/home/index",
-                          isTab: true
-                        });
-                    }
-                  });
-                }
-              }
-            });
-          } else {
-          }
-        }
-      });
-    }
   },
   mounted() {
     if (
