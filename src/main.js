@@ -30,7 +30,12 @@ Vue.mixin({
         },
         extConfig() {
             // return wx.getExtConfigSync ? wx.getExtConfigSync() : {};
-            return { bId:"abe4d34f-cb60-4bd1-8c4f-864af1161640"}
+            return { 
+                "sName": "曦曦妈母婴",
+                "sLogo": "http://wx.qlogo.cn/mmopen/eTOoibR3VocHTbpuR2Q8KdP0ibrsT7mInvfyoLaQs3F4Q0wuUlGtJlYTWMVR7FfNvauvRavz02OoMiayZyZ6KkYcericMicqMh3Ss/0",
+                "bId": "abe4d34f-cb60-4bd1-8c4f-864af1161640",
+                "appid": "wx24ca864c703571eb"
+            }
         },
         async launchOptions(){
             var options = await  wx.getLaunchOptionsSync();

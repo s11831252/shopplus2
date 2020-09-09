@@ -67,7 +67,7 @@ export default {
         success: obj => {
           if (obj.errMsg.indexOf("login:ok") > -1) {
           
-            this.$WeixinOpenAPI.Account_wxLogin(obj.code,that.extConfig.appid).then(rep => {
+            this.$ShoppingAPI.Account_wxLogin({code:obj.code,appid:that.extConfig.appid}).then(rep => {
               if (rep.ret == 0) {
                 // console.log(rep);
                 this.userInfo.unionid = rep.data.result.unionid;
