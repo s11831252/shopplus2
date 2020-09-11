@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import MpvueRoterPatch from 'mpvue-router-patch'
+import MpvueRoterPatch from 'mpvue-router-patch' 
 import store from './store'
 import UJAPI from "./api/UJAPI"
 import ShoppingAPI from "./api/ShoppingAPI"
@@ -37,8 +37,8 @@ Vue.mixin({
                 "appid": "wx24ca864c703571eb"
             }
         },
-        async launchOptions(){
-            var options = await  wx.getLaunchOptionsSync();
+        launchOptions(){
+            var options =  wx.getLaunchOptionsSync();
             return options;
         }
     },
@@ -57,6 +57,7 @@ Vue.mixin({
         },
         //全局wx登录函数,vue生命周期执行时,对于需要登录票据才可进行访问请求的异步操作可以放置到获取登录之后执行
         wx_login(callback) {
+            var that = this;
             var parms ={};
             if(this.launchOptions.query&&this.launchOptions.query.InvitaId)
             {
@@ -64,11 +65,12 @@ Vue.mixin({
             }
             if(!this.$store.getters.Logined)//没有登录尝试登录 
             {
+                debugger;
                 // 调用wx登录接口
                 wx.login({
                     success: obj => {
                         if (obj.errMsg.indexOf("login:ok") > -1) {
-                            this.$ShoppingAPI.Account_wxLogin({code:obj.code,appid:that.extConfig.appid}).then(rep => {
+                            this.$ShoppingAPI.Account_wxLogin({code:obj.code,appid:this.extConfig.appid}).then(rep => {
                                 if (rep.ret == 0) {
                                     this.userInfo.unionid = rep.data.result.unionid;
                                     this.userInfo.openid = rep.data.result.openid;

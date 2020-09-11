@@ -334,7 +334,7 @@
       <button class="cancel_button btn" @click="go({path:'/pages/order/orderreturn',query:{OrderId:orderInfo.OrderId,retreat:1}})">申请退款</button>
     </div>
     <!-- 确认收货 v-if="orderInfo.State==3"-->
-    <div class="buttommessage" v-if="orderInfo.State==1">
+    <div class="buttommessage" v-if="orderInfo.State==3">
       <button class="cancel_button btn" @click.stop="ensurebtr">确认收货</button>
     </div>
 
@@ -714,11 +714,11 @@ export default {
     },
 
     checktan() {
-      if ((this.sign = true)) {
+      if (this.sign) {
         this.consignee = false;
         this.sign = false;
         this.scan = false;
-        this.Over = true;
+        this.Over = false;
         this.hint = false;
         this.offline = false;
       }
@@ -746,6 +746,7 @@ export default {
     //确定收货按钮
     ensurebtr() {
       this.sign = true;
+      this.Over = true;
     },
 
     //订单取消表单

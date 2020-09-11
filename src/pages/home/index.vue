@@ -56,7 +56,7 @@
         <i class="icon">&#xe68b;</i>
       </p>
       <ul class="products_list">
-        <li v-for="(item,index) in hotGoods" :key="index">
+        <li v-for="(item,index) in hotGoods" :key="index" @click="go({path:'/pages/shop/good-detail',query:{sId:item.sId,gId:item.gId}})">
           <img :src="item.Images[0].Image_url" />
           <p class="name">{{item.gName}}</p>
           <!-- <p class="brief">节能静音BD/BC-203KM</p> -->
@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       Goods: [],
-      banner:["/static/img/2@3x.png"]
+      banner:["/static/img/5.png","/static/img/35.png","/static/img/2@3x.png",]
     };
   },
   computed:{
